@@ -1,0 +1,174 @@
+'''
+Intermolecular Potentials 2023
+Candidate Number: 1538669
+Date: 26/4/23
+Dependencies: Python 3.9.1
+This is the brute force version.... yay
+'''
+
+# Imports the required modules
+
+import numpy as np
+
+# Set the constants (for water)
+
+r = 2.5                                      # Distance (Å)
+static = 1.8550                              # Static dipole (Debye)
+a = 1.4500                                   # Dipole polarisability (/4pi*vacuum permittivity) (Å^3)
+E0 = 0.005526349406                          # Vacuum permittivity (e^2 eV^-1 Å^-1)
+
+# This calculates all the distances.
+
+# Molecule 0
+
+r01 = abs(r - 0 * r)
+r02 = abs(2 * r - 0 * r)
+r03 = abs(3 * r - 0 * r)
+r04 = abs(4 * r - 0 * r)
+
+# Molecule 1
+
+r10 = abs(0 - 1 * r)
+r12 = abs(2 * r - 1 * r)
+r13 = abs(3 * r - 1 * r)
+r14 = abs(4 * r - 1 * r)
+
+# Molecule 2
+
+r20 = abs(0 - 2 * r)
+r21 = abs(r - 2 * r)
+r23 = abs(3 * r - 2 * r)
+r24 = abs(4 * r - 2 * r)
+
+# Molecule 3
+
+r30 = abs(0 - 3 * r)
+r31 = abs(r - 3 * r)
+r32 = abs(2 * r - 3 * r)
+r34 = abs(4 * r - 3 * r)
+
+# Molecule 4
+
+r40 = abs(0 - 4 * r)
+r41 = abs(r - 4 * r)
+r42 = abs(2 * r - 4 * r)
+r43 = abs(3 * r - 4 * r)
+
+u_total_0 = static
+u_total_1 = static
+u_total_2 = static
+u_total_3 = static
+u_total_4 = static
+
+Dipole1 = 0
+Dipole = 1
+
+while Dipole1 != Dipole:
+
+    Dipole = Dipole1
+
+    # Calculates the induced dipole (ID) and Induced Energy (IE) at each molecule
+    # as a result of each of the other molecules
+
+    # Molecule 0
+
+    ID01 = (2 * a * u_total_0) / (r01**3)
+    ID02 = (2 * a * u_total_0) / (r02**3)
+    ID03 = (2 * a * u_total_0) / (r03**3)
+    ID04 = (2 * a * u_total_0) / (r04**3)
+
+    Total_ID_0 = ID01 + ID02 + ID03 + ID04
+
+    IE01 = (4 * a * (u_total_0 ** 2)) / (4 * np.pi * E0 * (r01 ** 6))
+    IE02 = (4 * a * (u_total_0 ** 2)) / (4 * np.pi * E0 * (r02 ** 6))
+    IE03 = (4 * a * (u_total_0 ** 2)) / (4 * np.pi * E0 * (r03 ** 6))
+    IE04 = (4 * a * (u_total_0 ** 2)) / (4 * np.pi * E0 * (r04 ** 6))
+
+    Total_IE_0 = 0.5 * (IE01 + IE02 + IE03 + IE04)
+
+    # Molecule 1
+
+    ID10 = (2 * a * u_total_1) / (r10**3)
+    ID12 = (2 * a * u_total_1) / (r12**3)
+    ID13 = (2 * a * u_total_1) / (r13**3)
+    ID14 = (2 * a * u_total_1) / (r14**3)
+
+    Total_ID_1 = ID10 + ID12 + ID13 + ID14
+
+    IE10 = (4 * a * (u_total_1 ** 2)) / (4 * np.pi * E0 * (r10 ** 6))
+    IE12 = (4 * a * (u_total_1 ** 2)) / (4 * np.pi * E0 * (r12 ** 6))
+    IE13 = (4 * a * (u_total_1 ** 2)) / (4 * np.pi * E0 * (r13 ** 6))
+    IE14 = (4 * a * (u_total_1 ** 2)) / (4 * np.pi * E0 * (r14 ** 6))
+
+    Total_IE_1 = 0.5 * (IE10 + IE12 + IE13 + IE14)
+
+    # Molecule 2
+
+    ID20 = (2 * a * u_total_2) / (r20**3)
+    ID21 = (2 * a * u_total_2) / (r21**3)
+    ID23 = (2 * a * u_total_2) / (r23**3)
+    ID24 = (2 * a * u_total_2) / (r24**3)
+
+    Total_ID_2 = ID20 + ID21 + ID23 + ID24
+
+    IE20 = (4 * a * (u_total_2 ** 2)) / (4 * np.pi * E0 * (r20 ** 6))
+    IE21 = (4 * a * (u_total_2 ** 2)) / (4 * np.pi * E0 * (r21 ** 6))
+    IE23 = (4 * a * (u_total_2 ** 2)) / (4 * np.pi * E0 * (r23 ** 6))
+    IE24 = (4 * a * (u_total_2 ** 2)) / (4 * np.pi * E0 * (r24 ** 6))
+
+    Total_IE_2 = 0.5 * (IE20 + IE21 + IE23 + IE24)
+
+    # Molecule 3
+
+    ID30 = (2 * a * u_total_3) / (r30**3)
+    ID31 = (2 * a * u_total_3) / (r31**3)
+    ID32 = (2 * a * u_total_3) / (r32**3)
+    ID34 = (2 * a * u_total_3) / (r34**3)
+
+    Total_ID_3 = ID30 + ID31 + ID32 + ID34
+
+    IE30 = (4 * a * (u_total_3 ** 2)) / (4 * np.pi * E0 * (r30 ** 6))
+    IE31 = (4 * a * (u_total_3 ** 2)) / (4 * np.pi * E0 * (r31 ** 6))
+    IE32 = (4 * a * (u_total_3 ** 2)) / (4 * np.pi * E0 * (r32 ** 6))
+    IE34 = (4 * a * (u_total_3 ** 2)) / (4 * np.pi * E0 * (r34 ** 6))
+
+    Total_IE_3 = 0.5 * (IE30 + IE31 + IE32 + IE34)
+
+    # Molecule 4
+
+    ID40 = (2 * a * u_total_4) / (r40**3)
+    ID41 = (2 * a * u_total_4) / (r41**3)
+    ID42 = (2 * a * u_total_4) / (r42**3)
+    ID43 = (2 * a * u_total_4) / (r43**3)
+
+    Total_ID_4 = ID40 + ID41 + ID42 + ID43
+
+    IE40 = (4 * a * (u_total_4 ** 2)) / (4 * np.pi * E0 * (r40 ** 6))
+    IE41 = (4 * a * (u_total_4 ** 2)) / (4 * np.pi * E0 * (r41 ** 6))
+    IE42 = (4 * a * (u_total_4 ** 2)) / (4 * np.pi * E0 * (r42 ** 6))
+    IE43 = (4 * a * (u_total_4 ** 2)) / (4 * np.pi * E0 * (r43 ** 6))
+
+    Total_IE_4 = 0.5 * (IE40 + IE41 + IE42 + IE43)
+
+    # Total values for the full system
+
+    Total_Dipole = static + (Total_ID_4 + Total_ID_3 + Total_ID_2 + Total_ID_0 + Total_ID_1)
+    Total_Induced_Energy = (Total_IE_0 + Total_IE_1 + Total_IE_2 + Total_IE_4 + Total_IE_3)
+    u_total_0 = static + Total_ID_0
+    u_total_1 = static + Total_ID_1
+    u_total_2 = static + Total_ID_2
+    u_total_3 = static + Total_ID_3
+    u_total_4 = static + Total_ID_4
+
+    print(Total_Dipole, 'D')
+    print('Energy', Total_Induced_Energy, 'eV')
+    Dipole1 = round(Total_Dipole, 5)
+
+
+else:
+    print('For distance', r, 'Å')
+    print('Final total dipole', Total_Dipole, 'D')
+    print(u_total_0, u_total_1, u_total_2, u_total_3, u_total_4)
+    print('Final Total Induction Energy:', Total_Induced_Energy, 'eV')
+
+    #Calculate Electrostatic Energy

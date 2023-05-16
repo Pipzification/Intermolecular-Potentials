@@ -160,14 +160,21 @@ while Dipole1 != Dipole:
     u_total_3 = static + Total_ID_3
     u_total_4 = static + Total_ID_4
 
-    print(Total_Dipole, 'D')
+    u_total_0r = round(u_total_0, 5)
+    u_total_1r = round(u_total_1, 5)
+    u_total_2r = round(u_total_2, 5)
+    u_total_3r = round(u_total_3, 5)
+    u_total_4r = round(u_total_4, 5)
+
+    print(u_total_0r, u_total_1r, u_total_2r, u_total_3r, u_total_4r)
     print('Energy', Total_Induced_Energy, 'eV')
     Dipole1 = round(Total_Dipole, 5)
+
 
 else:
     print('For distance', r, 'Å')
     print('Final total dipole', Total_Dipole, 'D')
     print(u_total_0, u_total_1, u_total_2, u_total_3, u_total_4)
-    print('Final Total Induction Energy:', Total_Induced_Energy, 'eV') 
+    print('Final Total Induction Energy:', Total_Induced_Energy, 'eV')
 
-    #Calculate Electrostatic Energy
+

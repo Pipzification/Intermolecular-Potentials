@@ -1,0 +1,131 @@
+'''
+Intermolecular Potentials 2023
+Candidate Number: 1538669
+Date: 26/4/23
+Dependencies: Python 3.9.1
+'''
+
+# Imports the required modules
+
+import numpy as np
+
+# Set the constants (for water)
+
+r = 2.5                                      # Distance (Å)
+static = 1.8550                              # Static dipole (Debye)
+a = 1.4500                                   # Dipole polarisability (/4pi*vacuum permittivity) (Å^3)
+E0 = 0.005526349406                          # Vacuum permittivity (e^2 eV^-1 Å^-1)
+e = 1                                        # Point charge (e)
+PointCharge = 0                              # Point charge on/ off toggle (0 = Off, 1 = On)
+
+# Presets variables
+
+Total_Dipole = [static, static, static, static, static]
+Dipole0 = 0
+Dipole1 = 1
+Induction_Energy = []
+Elec_Energy = []
+induced_dipoles = np.zeros(5)
+count = 0
+
+def Dipole(induced_dipoles):
+
+    # Calculates the dipoles of each molecule(i) as a result of the other molecules (j)
+
+    for i in range(0,5):
+
+        u_ind = np.zeros(5)
+
+        for j in range(0, 5):
+
+            if i != j:
+
+                u_tot = Total_Dipole[j]
+                u_ind[j] = ((2 * u_tot) / (abs(i-j) * r) ** 3)
+
+            else:
+                pass
+
+        tot_dipole = static + (a * sum(u_ind))
+        induced_dipoles[i] = tot_dipole
+
+    return induced_dipoles
+
+def Induced_Energy():
+
+    # Calculates the induced energies at each molecule and the total for each iteration.
+
+    Induction_Energy.clear()
+
+    for i in range(0, 5):
+
+        Forces = []
+        Forces.clear()
+
+        for j in range(0, 5):
+
+            if abs(i-j) != 0:
+               u_tot = Total_Dipole[j]
+               u_tot_con = u_tot / 0.2081943
+               Forcesq = (1/(4 * np.pi * E0)) * ((2 * u_tot_con) ** 2)/ ((abs(i-j) * r) ** 6)
+               Forces.append(Forcesq)
+
+        Energy_Ind = -0.5 * a * sum(Forces)
+        Induction_Energy.append(Energy_Ind)
+
+def Electrostatic_Energy():
+
+    # Calculates the final electrostatic energy
+
+    Elec_Energy.clear()
+
+    for i in range(0, 5):
+
+        Stat_E = []
+        Stat_E.clear()
+
+        for j in range(0, 5):
+
+            if abs(i-j) != 0:
+               u_tot_j = Total_Dipole[j]
+               u_tot_con_j = u_tot_j / 0.2081943
+               u_tot_con_i = Total_Dipole[i] / 0.2081943
+               E_Energy = -(u_tot_con_i * (1/(4 * np.pi * E0)) * (2 * (u_tot_con_j) / ((abs(i-j) * r) ** 3)))
+               Stat_E.append(E_Energy)
+
+        Energy_Tot = sum(Induction_Energy) + sum(Stat_E)
+        Elec_Energy.append(Energy_Tot)
+
+while Dipole1 != Dipole0:
+
+    # Runs the iterations
+
+    Dipole0 = Dipole1
+
+    Dipole(induced_dipoles)
+
+    Induced_Energy()
+
+    count = count + 1
+
+    print(count, induced_dipoles, 'Debye')
+    print(Induction_Energy)
+    print(sum(Induction_Energy), 'eV')
+
+    Total_induced = sum(Total_Dipole)
+    Dipole1 = (round(Total_induced, 4))
+    Total_Dipole = (induced_dipoles[0], induced_dipoles[1], induced_dipoles[2], induced_dipoles[3], induced_dipoles[4])
+
+else:
+ # At convergence it prints the final values
+
+    print('For distance', r, 'Å')
+    print('Final total dipoles at each molecule')
+    print(Total_Dipole)
+    print(sum(Total_Dipole)/5)
+    print('Final induction energy', sum(Induction_Energy), 'eV')
+    Electrostatic_Energy()
+    print('Final Electrostatic Energy', sum(Elec_Energy), 'eV')
+
+
+

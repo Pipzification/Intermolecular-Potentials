@@ -1,0 +1,34 @@
+'''
+Intermolecular Potentials 2023 Q2
+Candidate Number: 1538669
+Date: 26/4/23
+Dependencies: Python 3.9.1
+'''
+# Import the required modules
+
+import numpy as np
+
+# Set the constants
+
+E_0 = 0.005526349406                                                             # Vacuum permittivity (e^2 eV^-1 Å^-1)
+r =    4.5 # 3.5 # 2.5                                                           # Distance (A)
+E_Electrostatic =-272.54056483581735 # -725.5497251906847 # -4478.619152138421   # Electrostatic energy (eV)
+E_Induced = -3.6724497580823225  # -19.3421866224156   -267.4535655734226        # Induction energy (eV)
+
+# Calculate the new Electrostatic energy
+
+E_New = -(E_Electrostatic - E_Induced)
+print(E_New)
+u_dipoles = 0
+
+for i in range(0, 4):
+
+    for j in range(0, 4):
+
+        if j != i:
+            dipole = (np.sqrt((2 * np.pi * E_0 * E_New) * ((abs(i-j) * r)**3)))
+
+            u_dipoles = (u_dipoles + dipole) * 0.2081943
+
+Average_Dipole = u_dipoles / 5
+print(Average_Dipole)
